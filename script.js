@@ -13,3 +13,32 @@ const apiUrls = [
 ];
 
 // You can write your code here
+// Function to fetch data using Promise.all
+function fetchDataWithPromiseAll() {
+  const startTime = performance.now();
+
+  Promise.all(apiUrls.map(url => fetch(url)))
+    .then(responses => Promise.all(responses.map(response => response.json())))
+    .then(data => {
+      const endTime = performance.now();
+      const timeTaken = endTime - startTime;
+      document.getElementById("output-all").innerHTML = timeTaken.toFixed(2);
+    })
+    .catch(error => console.log(error));
+}
+
+// Function to fetch data using Promise.any
+function fetchDataWithPromiseAny() {
+  const startTime = performance.now();
+
+  Promise.any(apiUrls.map(url => fetch(url).then(response => response.json())))
+    .then(data => {
+      const endTime = performance.now();
+      const timeTaken = endTime - startTime;
+      document.getElementById("output-any").innerHTML = timeTaken.toFixed(2);
+    })
+    .catch(error => console.log(error));
+}
+
+fetchDataWithPromiseAll();
+fetchDataWithPromiseAny()
